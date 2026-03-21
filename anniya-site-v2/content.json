@@ -1,0 +1,26 @@
+{
+  "hero": {
+    "subtitle_de": "",
+    "subtitle_en": ""
+  },
+  "about": {
+    "text_de": "",
+    "text_en": ""
+  },
+  "contact": {
+    "text_de": "",
+    "text_en": ""
+  },
+  "colors": {
+    "primary": "#ff0000",
+    "background": "#1a1228",
+    "accent": "#a98fd8"
+  },
+  "categories": [
+    "mental-health",
+    "women",
+    "fanart",
+    "sketches",
+    "other"
+  ]
+}
