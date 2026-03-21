@@ -1,0 +1,154 @@
+[
+  {
+    "title_de": "Growth",
+    "title_en": "Growth",
+    "category": "mental-health",
+    "file": "images/artwork/mental-health/Growth.jpeg",
+    "year": 2024,
+    "id": "1000"
+  },
+  {
+    "title_de": "Freiheit & Unabhängigkeit",
+    "title_en": "Freedom & Independence",
+    "category": "mental-health",
+    "file": "images/artwork/mental-health/Highway.jpeg",
+    "year": 2024,
+    "id": "1001"
+  },
+  {
+    "title_de": "Sterntaler",
+    "title_en": "Sterntaler",
+    "category": "mental-health",
+    "file": "images/artwork/mental-health/Sterntaler_.jpeg",
+    "year": 2024,
+    "id": "1002"
+  },
+  {
+    "title_de": "Unbenanntes Projekt",
+    "title_en": "Untitled Project",
+    "category": "mental-health",
+    "file": "images/artwork/mental-health/Unbenanntes_Projekt.jpeg",
+    "year": 2024,
+    "id": "1003"
+  },
+  {
+    "title_de": "Woman",
+    "title_en": "Woman",
+    "category": "women",
+    "file": "images/artwork/women/Woman.jpeg",
+    "year": 2024,
+    "id": "1004"
+  },
+  {
+    "title_de": "Woman in the Shadows",
+    "title_en": "Woman in the Shadows",
+    "category": "women",
+    "file": "images/artwork/women/Woman_in_the_shadows.jpeg",
+    "year": 2024,
+    "id": "1005"
+  },
+  {
+    "title_de": "Flower Girl",
+    "title_en": "Flower Girl",
+    "category": "women",
+    "file": "images/artwork/women/Flowergirl.jpeg",
+    "year": 2024,
+    "id": "1006"
+  },
+  {
+    "title_de": "Greek Woman",
+    "title_en": "Greek Woman",
+    "category": "women",
+    "file": "images/artwork/women/Greek_woman_.jpeg",
+    "year": 2024,
+    "id": "1007"
+  },
+  {
+    "title_de": "Talking on the Phone",
+    "title_en": "Talking on the Phone",
+    "category": "women",
+    "file": "images/artwork/women/Talking_on_the_phone_.jpeg",
+    "year": 2024,
+    "id": "1008"
+  },
+  {
+    "title_de": "The Widow",
+    "title_en": "The Widow",
+    "category": "women",
+    "file": "images/artwork/women/The_Widow.jpeg",
+    "year": 2024,
+    "id": "1009"
+  },
+  {
+    "title_de": "Stripes × A Lady",
+    "title_en": "Stripes × A Lady",
+    "category": "women",
+    "file": "images/artwork/women/Stripes_X_A_Lady.jpeg",
+    "year": 2024,
+    "id": "1010"
+  },
+  {
+    "title_de": "Ghibli",
+    "title_en": "Ghibli",
+    "category": "fanart",
+    "file": "images/artwork/fanart/Ghibli_.jpeg",
+    "year": 2024,
+    "id": "1011"
+  },
+  {
+    "title_de": "Sakura",
+    "title_en": "Sakura",
+    "category": "fanart",
+    "file": "images/artwork/fanart/Sakura.jpeg",
+    "year": 2024,
+    "id": "1012"
+  },
+  {
+    "title_de": "Pisces",
+    "title_en": "Pisces",
+    "category": "fanart",
+    "file": "images/artwork/fanart/Pisces.jpeg",
+    "year": 2024,
+    "id": "1013"
+  },
+  {
+    "title_de": "Year of the Tiger",
+    "title_en": "Year of the Tiger",
+    "category": "fanart",
+    "file": "images/artwork/fanart/Year_Of_The_Tiger_.jpeg",
+    "year": 2024,
+    "id": "1014"
+  },
+  {
+    "title_de": "Rosie × Anne",
+    "title_en": "Rosie × Anne",
+    "category": "sketches",
+    "file": "images/artwork/sketches/Rosie_X_Anne.jpeg",
+    "year": 2024,
+    "id": "1015"
+  },
+  {
+    "title_de": "Holi × Love",
+    "title_en": "Holi × Love",
+    "category": "other",
+    "file": "images/artwork/other/Holi_X_Love_.jpeg",
+    "year": 2024,
+    "id": "1016"
+  },
+  {
+    "title_de": "Woman with the Hat",
+    "title_en": "Woman with the Hat",
+    "category": "other",
+    "file": "images/artwork/other/Woman_with_the_hat.jpeg",
+    "year": 2024,
+    "id": "1017"
+  },
+  {
+    "title_de": "Ocean Witch",
+    "title_en": "Ocean Witch",
+    "category": "other",
+    "file": "images/artwork/other/Ocean_Witch_.jpeg",
+    "year": 2024,
+    "id": "1018"
+  }
+]
