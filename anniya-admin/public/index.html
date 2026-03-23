@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Anniya Admin ✦</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--ink:#0F0B1A;--ink2:#1A1228;--ink3:#241C35;--lav:#7C5CBF;--lav2:#A98FD8;--lav3:#CDB8EE;--rose:#E8857A;--green:#7AC4A0;--amber:#E8B84B;--text:#EDE6F8;--muted:#8B7FA8;--border:rgba(124,92,191,0.2);--r:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+
+/* WAKE UP SCREEN */
+#wake-screen{display:none;position:fixed;inset:0;background:var(--ink);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:20px;text-align:center}
+.wake-spinner{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--lav);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.wake-title{font-family:'Caveat',cursive;font-size:28px;color:var(--lav2)}
+.wake-msg{color:var(--muted);font-size:14px;max-width:280px;line-height:1.6}
+.wake-dots span{animation:blink 1.4s infinite;opacity:0}
+.wake-dots span:nth-child(2){animation-delay:.2s}
+.wake-dots span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
+
+/* LOGIN */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh}
+.login-box{background:var(--ink2);border:1px solid var(--border);border-radius:20px;padding:48px 40px;width:360px;text-align:center}
+.login-box h1{font-family:'Caveat',cursive;font-size:42px;color:var(--lav2);margin-bottom:4px}
+.login-box p{color:var(--muted);font-size:13px;margin-bottom:24px}
+.login-box input{width:100%;padding:14px 16px;background:var(--ink3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;margin-bottom:12px;outline:none}
+.login-box input:focus{border-color:var(--lav)}
+.btn-primary{width:100%;padding:14px;background:var(--lav);color:white;border:none;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background .2s}
+.btn-primary:hover{background:var(--lav2)}
+.login-err{color:var(--rose);font-size:13px;margin-top:12px;min-height:18px}
+
+/* SHELL */
+#app{display:none}
+.shell{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:var(--ink2);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh;top:0;left:0;z-index:100}
+.sidebar-logo{font-family:'Caveat',cursive;font-size:28px;color:var(--lav2);padding:0 24px 20px;border-bottom:1px solid var(--border)}
+.sidebar-logo span{font-size:12px;display:block;color:var(--muted);font-family:'DM Sans';font-weight:300}
+.user-badge{display:flex;align-items:center;gap:8px;padding:12px 24px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--lav);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:white;flex-shrink:0}
+.user-name{font-size:13px;color:var(--text)}
+.user-role{font-size:10px;color:var(--muted)}
+.nav-links{padding:8px 0;flex:1;overflow-y:auto}
+.nav-link{display:flex;align-items:center;gap:10px;padding:11px 24px;color:var(--muted);font-size:14px;cursor:pointer;transition:all .15s;border-left:3px solid transparent}
+.nav-link:hover{color:var(--text);background:var(--ink3)}
+.nav-link.active{color:var(--lav2);border-left-color:var(--lav);background:rgba(124,92,191,.08)}
+.nav-link .icon{font-size:17px;width:20px;text-align:center}
+.admin-only{display:none}
+.sidebar-footer{padding:16px 24px;border-top:1px solid var(--border)}
+.btn-logout{width:100%;padding:10px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;cursor:pointer;font-size:13px;transition:all .2s}
+.btn-logout:hover{border-color:var(--rose);color:var(--rose)}
+
+/* DEPLOY STATUS BAR */
+.deploy-bar{margin:0 24px 12px;padding:8px 12px;border-radius:8px;font-size:12px;display:flex;align-items:center;gap:8px;background:var(--ink3);border:1px solid var(--border)}
+.deploy-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.deploy-dot.ready{background:var(--green)}
+.deploy-dot.building{background:var(--amber);animation:pulse-dot 1s infinite}
+.deploy-dot.error{background:var(--rose)}
+.deploy-dot.unknown{background:var(--muted)}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+.deploy-text{color:var(--muted);flex:1}
+.deploy-text strong{color:var(--text)}
+
+/* MAIN */
+.main{margin-left:220px;flex:1;padding:40px;max-width:940px}
+.page-header{margin-bottom:32px}
+.page-header h2{font-family:'Caveat',cursive;font-size:34px;color:var(--lav3)}
+.page-header p{color:var(--muted);font-size:13px;margin-top:4px}
+
+.section{display:none}
+.section.active{display:block}
+
+/* CARDS */
+.card{background:var(--ink2);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:20px}
+.card h3{font-size:11px;font-weight:500;color:var(--lav3);margin-bottom:16px;letter-spacing:.05em;text-transform:uppercase}
+
+/* FORMS */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:.04em}
+.field input,.field textarea,.field select{width:100%;padding:11px 14px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-family:'DM Sans';outline:none;transition:border .15s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--lav)}
+.field textarea{resize:vertical;min-height:90px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{padding:10px 20px;border-radius:8px;font-size:13px;font-family:'DM Sans';cursor:pointer;transition:all .15s;border:none}
+.btn-save{background:var(--lav);color:white}
+.btn-save:hover{background:var(--lav2)}
+.btn-save:disabled{opacity:.5;cursor:not-allowed}
+.btn-danger{background:rgba(232,133,122,.15);color:var(--rose);border:1px solid rgba(232,133,122,.3)}
+.btn-danger:hover{background:rgba(232,133,122,.25)}
+.btn-ghost{background:transparent;color:var(--lav2);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--lav);background:rgba(124,92,191,.08)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.save-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
+.save-msg{font-size:12px;color:var(--green);opacity:0;transition:opacity .3s}
+.save-msg.show{opacity:1}
+
+/* LANG TABS */
+.lang-tabs{display:flex;gap:4px;margin-bottom:16px}
+.lang-tab{padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .15s}
+.lang-tab.active{background:var(--lav);color:white;border-color:var(--lav)}
+.lang-panel{display:none}
+.lang-panel.active{display:block}
+
+/* GALLERY */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.g-item{background:var(--ink3);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:grab;position:relative;transition:transform .15s}
+.g-item:hover{transform:translateY(-2px);border-color:var(--lav)}
+.g-item.dragging{opacity:.4;transform:scale(.95)}
+.g-item.drag-over{border-color:var(--lav2);background:rgba(124,92,191,.1)}
+.g-item img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--ink3)}
+.g-item-info{padding:8px 10px}
+.g-item-title{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-item-cat{font-size:10px;color:var(--muted);margin-top:2px}
+.g-item-del{position:absolute;top:6px;right:6px;width:26px;height:26px;background:rgba(15,11,26,.9);border:none;border-radius:50%;color:var(--rose);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;line-height:1}
+.g-item:hover .g-item-del{opacity:1}
+
+/* DROPZONE */
+.dropzone{border:2px dashed var(--border);border-radius:var(--r);padding:32px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:16px}
+.dropzone:hover,.dropzone.over{border-color:var(--lav);background:rgba(124,92,191,.05)}
+.dropzone .dz-icon{font-size:32px;margin-bottom:8px}
+.dropzone p{color:var(--muted);font-size:13px}
+.dropzone input{display:none}
+.dz-preview{display:none;margin-bottom:12px}
+.dz-preview img{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--border)}
+
+/* PROGRESS */
+.upload-progress{display:none;margin-top:12px}
+.progress-bar{height:4px;background:var(--ink3);border-radius:2px;overflow:hidden;margin-bottom:6px}
+.progress-fill{height:100%;background:var(--lav);border-radius:2px;transition:width .3s;width:0%}
+.progress-text{font-size:12px;color:var(--muted);text-align:center}
+
+/* CATEGORIES */
+.cat-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.cat-tag{display:flex;align-items:center;gap:6px;background:var(--ink3);border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:13px}
+.cat-tag button{background:none;border:none;color:var(--rose);cursor:pointer;font-size:16px;line-height:1;padding:0}
+.cat-add{display:flex;gap:8px}
+.cat-add input{flex:1;padding:10px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;outline:none}
+.cat-add input:focus{border-color:var(--lav)}
+
+/* COLORS */
+.color-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.color-field{text-align:center}
+.color-field label{display:block;font-size:11px;color:var(--muted);margin-bottom:8px}
+.color-field input[type="color"]{width:64px;height:64px;border-radius:50%;border:3px solid var(--border);cursor:pointer;background:none;padding:2px}
+.color-hex{font-size:11px;color:var(--lav3);margin-top:6px;font-family:monospace}
+
+/* QUALITY SLIDER */
+.quality-wrap{display:flex;align-items:center;gap:12px}
+.quality-wrap input[type=range]{flex:1;accent-color:var(--lav)}
+.quality-val{font-size:12px;color:var(--lav3);width:36px}
+
+/* PAGES */
+.page-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.page-item{display:flex;align-items:center;justify-content:space-between;background:var(--ink3);border:1px solid var(--border);border-radius:8px;padding:12px 16px}
+.page-item-name{font-size:14px;color:var(--text)}
+.page-item-badge{font-size:10px;color:var(--muted);background:var(--ink2);padding:2px 8px;border-radius:10px;margin-left:8px}
+.page-actions{display:flex;gap:6px;align-items:center}
+
+/* LOGS (admin only) */
+.log-list{display:flex;flex-direction:column;gap:4px;max-height:500px;overflow-y:auto}
+.log-entry{padding:8px 12px;border-radius:6px;font-size:12px;font-family:monospace;background:var(--ink3);border-left:3px solid var(--border)}
+.log-entry.info{border-left-color:var(--lav)}
+.log-entry.warn{border-left-color:var(--amber)}
+.log-entry.error{border-left-color:var(--rose);background:rgba(232,133,122,.05)}
+.log-ts{color:var(--muted);margin-right:8px}
+.log-user{color:var(--lav2);margin-right:8px}
+.log-action{color:var(--text)}
+.log-detail{color:var(--muted)}
+.log-error{color:var(--rose)}
+.log-filters{display:flex;gap:8px;margin-bottom:12px}
+.log-filter-btn{padding:4px 12px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .15s}
+.log-filter-btn.active{background:var(--lav);color:white;border-color:var(--lav)}
+
+/* PREVIEW */
+.preview-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.preview-url{flex:1;padding:10px 14px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:13px;font-family:monospace}
+.preview-frame{width:100%;height:620px;border:1px solid var(--border);border-radius:var(--r);background:var(--ink3)}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;background:var(--ink3);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text);opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none;z-index:999;max-width:320px}
+#toast.show{opacity:1;transform:translateY(0)}
+#toast.success{border-color:var(--green);color:var(--green)}
+#toast.error{border-color:var(--rose);color:var(--rose)}
+#toast.warning{border-color:var(--amber);color:var(--amber)}
+
+@media(max-width:700px){
+  .sidebar{width:60px}
+  .nav-link span,.sidebar-logo span,.sidebar-logo .wordmark,.user-name,.user-role,.deploy-bar{display:none}
+  .main{margin-left:60px;padding:24px 16px}
+  .field-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- WAKE UP SCREEN (for Railway cold starts) -->
+<div id="wake-screen">
+  <div class="wake-spinner"></div>
+  <div class="wake-title">Anniya Admin ✦</div>
+  <div class="wake-msg">Der Server wacht gerade auf<span class="wake-dots"><span>.</span><span>.</span><span>.</span></span><br>Bitte einen Moment warten 🌸</div>
+</div>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>Anniya ✦</h1>
+    <p>Admin Panel – Art is a Magic Spell</p>
+    <input type="text"     id="username-input" placeholder="Benutzername" autocomplete="username"/>
+    <input type="password" id="pw-input"       placeholder="Passwort…"    autocomplete="current-password"/>
+    <button class="btn-primary" onclick="doLogin()">Einloggen</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">✦ <span class="wordmark">Anniya</span><span>Admin Panel</span></div>
+    <div class="user-badge">
+      <div class="user-avatar" id="user-avatar">?</div>
+      <div>
+        <div class="user-name" id="user-name-display">–</div>
+        <div class="user-role" id="user-role-display">–</div>
+      </div>
+    </div>
+    <div class="deploy-bar" id="deploy-bar">
+      <div class="deploy-dot unknown" id="deploy-dot"></div>
+      <div class="deploy-text" id="deploy-text">Deploy Status…</div>
+    </div>
+    <nav class="nav-links">
+      <div class="nav-link active" onclick="showSection('gallery')" data-section="gallery"><span class="icon">🖼</span><span>Galerie</span></div>
+      <div class="nav-link" onclick="showSection('texts')" data-section="texts"><span class="icon">✏️</span><span>Texte</span></div>
+      <div class="nav-link" onclick="showSection('categories')" data-section="categories"><span class="icon">🗂</span><span>Kategorien</span></div>
+      <div class="nav-link" onclick="showSection('colors')" data-section="colors"><span class="icon">🎨</span><span>Farben</span></div>
+      <div class="nav-link" onclick="showSection('pages')" data-section="pages"><span class="icon">📄</span><span>Seiten</span></div>
+      <div class="nav-link" onclick="showSection('preview')" data-section="preview"><span class="icon">👁</span><span>Vorschau</span></div>
+      <div class="nav-link admin-only" onclick="showSection('logs')" data-section="logs"><span class="icon">📋</span><span>Logs</span></div>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout" onclick="doLogout()">Abmelden</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- GALLERY -->
+    <div class="section active" id="section-gallery">
+      <div class="page-header">
+        <h2>Galerie verwalten</h2>
+        <p>Bilder hochladen, löschen und per Drag & Drop sortieren</p>
+      </div>
+      <div class="card">
+        <h3>Neues Kunstwerk hochladen</h3>
+        <div class="dropzone" id="dropzone" onclick="document.getElementById('file-input').click()">
+          <div class="dz-icon">🎨</div>
+          <p id="dz-label">Bild hierher ziehen oder klicken</p>
+          <input type="file" id="file-input" accept="image/*"/>
+        </div>
+        <div class="dz-preview" id="dz-preview"><img id="dz-thumb" src="" alt=""/></div>
+        <div class="field-row">
+          <div class="field"><label>Titel (Deutsch)</label><input type="text" id="up-title-de" placeholder="z.B. Wachstum"/></div>
+          <div class="field"><label>Title (English)</label><input type="text" id="up-title-en" placeholder="e.g. Growth"/></div>
+        </div>
+        <div class="field"><label>Kategorie</label><select id="up-category"></select></div>
+        <div class="field">
+          <label>Bildqualität</label>
+          <div class="quality-wrap">
+            <input type="range" id="up-quality" min="50" max="100" value="85" oninput="document.getElementById('up-q-val').textContent=this.value+'%'"/>
+            <span class="quality-val" id="up-q-val">85%</span>
+          </div>
+        </div>
+        <div class="upload-progress" id="upload-progress">
+          <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+          <div class="progress-text" id="progress-text">Wird hochgeladen…</div>
+        </div>
+        <button class="btn btn-save" id="up-btn" onclick="uploadArtwork()">✦ Hochladen + Watermark</button>
+      </div>
+      <div class="card">
+        <h3>Alle Kunstwerke — ziehen zum Sortieren</h3>
+        <div class="gallery-grid" id="gallery-grid"></div>
+        <button class="btn btn-ghost btn-sm" onclick="saveOrder()">↕ Reihenfolge speichern</button>
+      </div>
+    </div>
+
+    <!-- TEXTS -->
+    <div class="section" id="section-texts">
+      <div class="page-header"><h2>Texte bearbeiten</h2><p>Änderungen werden direkt live gespeichert</p></div>
+
+      <div class="card">
+        <h3>Hero – Startseite</h3>
+        <div class="lang-tabs">
+          <button class="lang-tab active" onclick="switchLang(this,'hero')">🇩🇪 Deutsch</button>
+          <button class="lang-tab" onclick="switchLang(this,'hero')">🇬🇧 English</button>
+        </div>
+        <div class="lang-panel active" id="hero-de">
+          <div class="field"><label>Untertitel (unter "Art is a Magic Spell")</label><textarea id="hero-sub-de" rows="2"></textarea></div>
+        </div>
+        <div class="lang-panel" id="hero-en">
+          <div class="field"><label>Subtitle</label><textarea id="hero-sub-en" rows="2"></textarea></div>
+        </div>
+        <div class="save-bar">
+          <button class="btn btn-save" onclick="saveSection('hero')">Speichern & Deployen</button>
+          <span class="save-msg" id="hero-msg">✓ Live gespeichert!</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Über mich</h3>
+        <div class="lang-tabs">
+          <button class="lang-tab active" onclick="switchLang(this,'about')">🇩🇪 Deutsch</button>
+          <button class="lang-tab" onclick="switchLang(this,'about')">🇬🇧 English</button>
+        </div>
+        <div class="lang-panel active" id="about-de">
+          <div class="field"><textarea id="about-text-de" rows="5"></textarea></div>
+        </div>
+        <div class="lang-panel" id="about-en">
+          <div class="field"><textarea id="about-text-en" rows="5"></textarea></div>
+        </div>
+        <div class="save-bar">
+          <button class="btn btn-save" onclick="saveSection('about')">Speichern & Deployen</button>
+          <span class="save-msg" id="about-msg">✓ Live gespeichert!</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Kontaktbereich</h3>
+        <div class="lang-tabs">
+          <button class="lang-tab active" onclick="switchLang(this,'contact')">🇩🇪 Deutsch</button>
+          <button class="lang-tab" onclick="switchLang(this,'contact')">🇬🇧 English</button>
+        </div>
+        <div class="lang-panel active" id="contact-de">
+          <div class="field"><textarea id="contact-text-de" rows="3"></textarea></div>
+        </div>
+        <div class="lang-panel" id="contact-en">
+          <div class="field"><textarea id="contact-text-en" rows="3"></textarea></div>
+        </div>
+        <div class="save-bar">
+          <button class="btn btn-save" onclick="saveSection('contact')">Speichern & Deployen</button>
+          <span class="save-msg" id="contact-msg">✓ Live gespeichert!</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Hero-Bild & Profilbild tauschen</h3>
+        <div class="field-row">
+          <div class="field">
+            <label>Hero-Hintergrundbild</label>
+            <input type="file" id="hero-img-file" accept="image/*" style="color:var(--muted)"/>
+            <div class="quality-wrap" style="margin-top:8px">
+              <input type="range" id="hero-img-q" min="50" max="100" value="90" oninput="document.getElementById('hero-q-val').textContent=this.value+'%'"/>
+              <span class="quality-val" id="hero-q-val">90%</span>
+            </div>
+            <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="uploadSpecial('hero')">Hochladen & Deployen</button>
+          </div>
+          <div class="field">
+            <label>Profilbild (Über mich)</label>
+            <input type="file" id="profile-img-file" accept="image/*" style="color:var(--muted)"/>
+            <div class="quality-wrap" style="margin-top:8px">
+              <input type="range" id="profile-img-q" min="50" max="100" value="90" oninput="document.getElementById('profile-q-val').textContent=this.value+'%'"/>
+              <span class="quality-val" id="profile-q-val">90%</span>
+            </div>
+            <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="uploadSpecial('profile')">Hochladen & Deployen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="section" id="section-categories">
+      <div class="page-header"><h2>Kategorien verwalten</h2><p>Kategorien werden sofort live aktualisiert</p></div>
+      <div class="card">
+        <h3>Aktuelle Kategorien</h3>
+        <div class="cat-list" id="cat-list"></div>
+        <div class="cat-add">
+          <input type="text" id="new-cat-input" placeholder="z.B. portraits"/>
+          <button class="btn btn-save" onclick="addCategory()">+ Hinzufügen</button>
+        </div>
+        <div class="save-bar" style="margin-top:16px">
+          <button class="btn btn-ghost" onclick="saveCategories()">Kategorien speichern & Deployen</button>
+          <span class="save-msg" id="cat-msg">✓ Live gespeichert!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLORS -->
+    <div class="section" id="section-colors">
+      <div class="page-header"><h2>Farben ändern</h2><p>Farbschema der Website anpassen</p></div>
+      <div class="card">
+        <h3>Website-Farben</h3>
+        <div class="color-grid">
+          <div class="color-field">
+            <label>Hauptfarbe (Lila)</label>
+            <input type="color" id="color-primary" value="#7C5CBF" oninput="updateColorHex('primary',this.value)"/>
+            <div class="color-hex" id="hex-primary">#7C5CBF</div>
+          </div>
+          <div class="color-field">
+            <label>Hintergrund</label>
+            <input type="color" id="color-background" value="#1A1228" oninput="updateColorHex('background',this.value)"/>
+            <div class="color-hex" id="hex-background">#1A1228</div>
+          </div>
+          <div class="color-field">
+            <label>Akzent (Lila hell)</label>
+            <input type="color" id="color-accent" value="#A98FD8" oninput="updateColorHex('accent',this.value)"/>
+            <div class="color-hex" id="hex-accent">#A98FD8</div>
+          </div>
+        </div>
+        <div class="save-bar" style="margin-top:20px">
+          <button class="btn btn-save" onclick="saveColors()">🎨 Farben speichern & Deployen</button>
+          <span class="save-msg" id="color-msg">✓ Live gespeichert!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGES -->
+    <div class="section" id="section-pages">
+      <div class="page-header"><h2>Seiten verwalten</h2><p>Neue Seiten erstellen (Shop, Commissions, etc.)</p></div>
+      <div class="card">
+        <h3>Vorhandene Seiten</h3>
+        <div class="page-list" id="page-list"></div>
+      </div>
+      <div class="card">
+        <h3>Neue Seite erstellen</h3>
+        <div class="field-row">
+          <div class="field"><label>URL-Name</label><input type="text" id="new-page-name" placeholder="z.B. shop"/></div>
+          <div class="field"><label>Seitentitel</label><input type="text" id="new-page-title" placeholder="z.B. Shop"/></div>
+        </div>
+        <button class="btn btn-save" onclick="createPage()">✦ Seite erstellen & Deployen</button>
+      </div>
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="section" id="section-preview">
+      <div class="page-header"><h2>Vorschau</h2><p>So sieht die Website gerade aus</p></div>
+      <div class="card" style="padding:16px">
+        <div class="preview-bar">
+          <div class="preview-url">/preview/index.html</div>
+          <button class="btn btn-ghost btn-sm" onclick="reloadPreview()">↺ Neu laden</button>
+          <a href="https://anniya.netlify.app" target="_blank" class="btn btn-ghost btn-sm">↗ Live Website</a>
+        </div>
+        <iframe class="preview-frame" id="preview-frame" src="" title="Vorschau"></iframe>
+      </div>
+    </div>
+
+    <!-- LOGS (admin only) -->
+    <div class="section" id="section-logs">
+      <div class="page-header"><h2>System Logs</h2><p>Alle Aktionen und Fehler</p></div>
+      <div class="card">
+        <h3>Filter</h3>
+        <div class="log-filters">
+          <button class="log-filter-btn active" onclick="filterLogs('all', this)">Alle</button>
+          <button class="log-filter-btn" onclick="filterLogs('info', this)">Info</button>
+          <button class="log-filter-btn" onclick="filterLogs('warn', this)">Warn</button>
+          <button class="log-filter-btn" onclick="filterLogs('error', this)">Fehler</button>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="loadLogs()" style="margin-bottom:12px">↺ Aktualisieren</button>
+        <div class="log-list" id="log-list"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+let artworks   = [];
+let categories = [];
+let uploadFile = null;
+let dragSrc    = null;
+let currentUser = null;
+let currentRole = null;
+let logFilter  = 'all';
+let allLogs    = [];
+
+// ── Wake-up / health check ────────────────────────────────────────────────────
+async function waitForServer() {
+  const MAX = 30; // max 30 attempts = ~60 seconds
+  for (let i = 0; i < MAX; i++) {
+    try {
+      const r = await fetch('/api/check-auth', { signal: AbortSignal.timeout(3000) });
+      if (r.status !== 503 && r.status !== 502) return true;
+    } catch {}
+    await new Promise(res => setTimeout(res, 2000));
+  }
+  return false;
+}
+
+// ── Auth ──────────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const username = document.getElementById('username-input').value.trim();
+  const password = document.getElementById('pw-input').value;
+  const err      = document.getElementById('login-err');
+  err.textContent = '';
+
+  const r = await fetch('/api/login', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ username, password })
+  });
+  const data = await r.json();
+
+  if (r.ok) {
+    currentUser = data.username;
+    currentRole = data.role;
+    initApp();
+  } else {
+    err.textContent = data.error || 'Fehler beim Einloggen';
+  }
+}
+
+document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('username-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+async function doLogout() {
+  await fetch('/api/logout', { method: 'POST' });
+  location.reload();
+}
+
+async function checkAuth() {
+  // Show wake screen while checking
+  const wake = document.getElementById('wake-screen');
+  
+  try {
+    const r = await fetch('/api/check-auth', { signal: AbortSignal.timeout(5000) });
+    if (r.ok) {
+      const data = await r.json();
+      currentUser = data.username;
+      currentRole = data.role;
+      initApp();
+      return;
+    }
+    if (r.status === 401) {
+      document.getElementById('login-screen').style.display = 'flex';
+      return;
+    }
+    // Server sleeping (502/503) — show wake screen
+    wake.style.display = 'flex';
+    const ok = await waitForServer();
+    wake.style.display = 'none';
+    if (ok) {
+      document.getElementById('login-screen').style.display = 'flex';
+    } else {
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('login-err').textContent = 'Server nicht erreichbar. Bitte Seite neu laden.';
+    }
+  } catch {
+    document.getElementById('login-screen').style.display = 'flex';
+  }
+}
+
+async function initApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+
+  // Show username and role
+  document.getElementById('user-name-display').textContent = currentUser;
+  document.getElementById('user-role-display').textContent = currentRole === 'admin' ? 'Admin' : 'Content';
+  document.getElementById('user-avatar').textContent = currentUser.charAt(0).toUpperCase();
+
+  // Show admin-only nav items
+  if (currentRole === 'admin') {
+    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
+  }
+
+  await Promise.all([loadContent(), loadArtworks(), loadCategories(), loadPages()]);
+  pollDeployStatus();
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  document.querySelector(`[data-section="${name}"]`).classList.add('active');
+  if (name === 'preview') reloadPreview();
+  if (name === 'logs' && currentRole === 'admin') loadLogs();
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function toast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className   = 'show ' + type;
+  setTimeout(() => t.className = '', 4000);
+}
+
+function showSaveMsg(id) {
+  const el = document.getElementById(id + '-msg');
+  if (!el) return;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ── Deploy status ─────────────────────────────────────────────────────────────
+async function pollDeployStatus() {
+  await refreshDeployStatus();
+  setInterval(refreshDeployStatus, 15000);
+}
+
+async function refreshDeployStatus() {
+  try {
+    const r = await fetch('/api/deploy/status');
+    const d = await r.json();
+    const dot  = document.getElementById('deploy-dot');
+    const text = document.getElementById('deploy-text');
+    dot.className = 'deploy-dot ' + (
+      d.status === 'ready'    ? 'ready'    :
+      d.status === 'building' ? 'building' :
+      d.status === 'error'    ? 'error'    : 'unknown'
+    );
+    const statusMap = {
+      ready:    '🟢 Live',
+      building: '🔨 Wird deployed…',
+      error:    '🔴 Deploy Fehler',
+      enqueued: '⏳ In Warteschlange',
+      unknown:  '– Status unbekannt'
+    };
+    text.innerHTML = `<strong>${statusMap[d.status] || d.status}</strong>`;
+  } catch {}
+}
+
+// ── Lang tabs ─────────────────────────────────────────────────────────────────
+function switchLang(btn, section) {
+  const tabs   = btn.parentElement.querySelectorAll('.lang-tab');
+  const panels = btn.closest('.card').querySelectorAll('.lang-panel');
+  const idx    = Array.from(tabs).indexOf(btn);
+  tabs.forEach(t => t.classList.remove('active'));
+  panels.forEach(p => p.classList.remove('active'));
+  if (tabs[idx])   tabs[idx].classList.add('active');
+  if (panels[idx]) panels[idx].classList.add('active');
+}
+
+// ── Content ───────────────────────────────────────────────────────────────────
+async function loadContent() {
+  const r = await fetch('/api/content');
+  if (!r.ok) return;
+  const c = await r.json();
+  document.getElementById('hero-sub-de').value     = c.hero?.subtitle_de  || '';
+  document.getElementById('hero-sub-en').value     = c.hero?.subtitle_en  || '';
+  document.getElementById('about-text-de').value   = c.about?.text_de     || '';
+  document.getElementById('about-text-en').value   = c.about?.text_en     || '';
+  document.getElementById('contact-text-de').value = c.contact?.text_de   || '';
+  document.getElementById('contact-text-en').value = c.contact?.text_en   || '';
+  if (c.colors) {
+    document.getElementById('color-primary').value    = c.colors.primary    || '#7C5CBF';
+    document.getElementById('color-background').value = c.colors.background || '#1A1228';
+    document.getElementById('color-accent').value     = c.colors.accent     || '#A98FD8';
+    ['primary','background','accent'].forEach(k => updateColorHex(k, c.colors[k]));
+  }
+}
+
+async function saveSection(section) {
+  const btn = document.querySelector(`#section-texts .btn-save`);
+  let patch = {};
+  if (section === 'hero')    patch.hero    = { subtitle_de: document.getElementById('hero-sub-de').value,     subtitle_en: document.getElementById('hero-sub-en').value };
+  if (section === 'about')   patch.about   = { text_de:     document.getElementById('about-text-de').value,   text_en:     document.getElementById('about-text-en').value };
+  if (section === 'contact') patch.contact = { text_de:     document.getElementById('contact-text-de').value, text_en:     document.getElementById('contact-text-en').value };
+
+  try {
+    const r = await fetch('/api/content', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(patch) });
+    const d = await r.json();
+    if (r.ok) { showSaveMsg(section); toast('✓ Gespeichert & auf Netlify deployed! 🌸'); refreshDeployStatus(); }
+    else toast(d.error || 'Fehler', 'error');
+  } catch { toast('Netzwerkfehler. Bitte versuche es erneut.', 'error'); }
+}
+
+// ── Colors ────────────────────────────────────────────────────────────────────
+function updateColorHex(key, val) {
+  const el = document.getElementById('hex-' + key);
+  if (el) el.textContent = val || '';
+}
+
+async function saveColors() {
+  const patch = { colors: {
+    primary:    document.getElementById('color-primary').value,
+    background: document.getElementById('color-background').value,
+    accent:     document.getElementById('color-accent').value,
+  }};
+  try {
+    const r = await fetch('/api/content', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(patch) });
+    const d = await r.json();
+    if (r.ok) { showSaveMsg('color'); toast('🎨 Farben gespeichert & deployed! 🌸'); refreshDeployStatus(); }
+    else toast(d.error || 'Fehler', 'error');
+  } catch { toast('Netzwerkfehler', 'error'); }
+}
+
+// ── Special images ────────────────────────────────────────────────────────────
+async function uploadSpecial(type) {
+  const fileEl = document.getElementById(type + '-img-file');
+  const qEl    = document.getElementById(type + '-img-q');
+  if (!fileEl.files[0]) return toast('Bitte zuerst ein Bild auswählen', 'error');
+  const fd = new FormData();
+  fd.append('image',   fileEl.files[0]);
+  fd.append('quality', qEl ? qEl.value : '90');
+  try {
+    const r    = await fetch(`/api/images/${type}`, { method: 'POST', body: fd });
+    const data = await r.json();
+    if (r.ok) { toast(type === 'hero' ? '🌟 Hero-Bild aktualisiert & deployed!' : '👤 Profilbild aktualisiert & deployed!'); fileEl.value = ''; refreshDeployStatus(); }
+    else toast(data.error || 'Fehler', 'error');
+  } catch { toast('Netzwerkfehler', 'error'); }
+}
+
+// ── Categories ────────────────────────────────────────────────────────────────
+async function loadCategories() {
+  const r  = await fetch('/api/categories');
+  categories = await r.json();
+  renderCategories();
+  renderCategorySelect();
+}
+
+function renderCategories() {
+  document.getElementById('cat-list').innerHTML = categories.map((c, i) => `
+    <div class="cat-tag">${c}<button onclick="removeCategory(${i})" title="Löschen">×</button></div>`).join('');
+}
+
+function renderCategorySelect() {
+  document.getElementById('up-category').innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
+}
+
+function addCategory() {
+  const val = document.getElementById('new-cat-input').value.trim().toLowerCase().replace(/\s+/g,'-');
+  if (!val) return toast('Bitte einen Namen eingeben', 'error');
+  if (categories.includes(val)) return toast('Kategorie existiert bereits', 'error');
+  categories.push(val);
+  document.getElementById('new-cat-input').value = '';
+  renderCategories(); renderCategorySelect();
+}
+
+function removeCategory(i) {
+  if (!confirm(`Kategorie "${categories[i]}" wirklich löschen?`)) return;
+  categories.splice(i, 1);
+  renderCategories(); renderCategorySelect();
+}
+
+async function saveCategories() {
+  try {
+    const r = await fetch('/api/categories', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ categories }) });
+    const d = await r.json();
+    if (r.ok) { showSaveMsg('cat'); toast('🗂 Kategorien gespeichert & deployed! 🌸'); refreshDeployStatus(); }
+    else toast(d.error || 'Fehler', 'error');
+  } catch { toast('Netzwerkfehler', 'error'); }
+}
+
+// ── Artworks ──────────────────────────────────────────────────────────────────
+async function loadArtworks() {
+  const r = await fetch('/api/artworks');
+  artworks = await r.json();
+  renderGallery();
+}
+
+function renderGallery() {
+  const grid = document.getElementById('gallery-grid');
+  if (!artworks.length) {
+    grid.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:12px">Noch keine Kunstwerke.</p>';
+    return;
+  }
+  grid.innerHTML = artworks.map((a, i) => `
+    <div class="g-item" draggable="true" data-index="${i}" data-id="${a.id}"
+         ondragstart="dragStart(event,${i})" ondragover="dragOver(event)" ondrop="dragDrop(event,${i})" ondragleave="dragLeave(event)" ondragend="dragEnd(event)">
+      <img src="/site-images/${a.file.replace('images/','')}" alt="${a.title_de}" loading="lazy" onerror="this.style.minHeight='80px'"/>
+      <div class="g-item-info">
+        <div class="g-item-title">${a.title_de}</div>
+        <div class="g-item-cat">${a.category}</div>
+      </div>
+      <button class="g-item-del" onclick="deleteArtwork('${a.id}',event)" title="Löschen">×</button>
+    </div>`).join('');
+}
+
+async function deleteArtwork(id, e) {
+  e.stopPropagation();
+  const a = artworks.find(x => x.id === id);
+  if (!a) return;
+  if (!confirm(`"${a.title_de}" wirklich löschen?\nDas Bild wird von der Website entfernt.`)) return;
+  try {
+    const r = await fetch(`/api/artworks/${id}`, { method: 'DELETE' });
+    const d = await r.json();
+    if (r.ok) { await loadArtworks(); toast('🗑 Bild gelöscht & Website aktualisiert'); refreshDeployStatus(); }
+    else toast(d.error || 'Fehler', 'error');
+  } catch { toast('Netzwerkfehler', 'error'); }
+}
+
+async function saveOrder() {
+  try {
+    const r = await fetch('/api/artworks/reorder', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ artworks }) });
+    const d = await r.json();
+    if (r.ok) { toast('↕ Reihenfolge gespeichert & deployed! 🌸'); refreshDeployStatus(); }
+    else toast(d.error || 'Fehler', 'error');
+  } catch { toast('Netzwerkfehler', 'error'); }
+}
+
+// ── Drag & Drop ───────────────────────────────────────────────────────────────
+function dragStart(e, idx) { dragSrc = idx; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; }
+function dragOver(e)  { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+function dragEnd(e)   { e.currentTarget.classList.remove('dragging'); }
+function dragDrop(e, idx) {
+  e.preventDefault(); e.currentTarget.classList.remove('drag-over');
+  if (dragSrc === null || dragSrc === idx) return;
+  const moved = artworks.splice(dragSrc, 1)[0];
+  artworks.splice(idx, 0, moved);
+  dragSrc = null;
+  renderGallery();
+}
+
+// ── Upload ────────────────────────────────────────────────────────────────────
+const dz = document.getElementById('dropzone');
+const fi = document.getElementById('file-input');
+dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('over'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); handleFile(e.dataTransfer.files[0]); });
+fi.addEventListener('change', () => handleFile(fi.files[0]));
+
+function handleFile(file) {
+  if (!file) return;
+  uploadFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('dz-thumb').src = e.target.result;
+    document.getElementById('dz-preview').style.display = 'block';
+    document.getElementById('dz-label').textContent = file.name;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function uploadArtwork() {
+  if (!uploadFile) return toast('Bitte zuerst ein Bild auswählen', 'error');
+  const de  = document.getElementById('up-title-de').value.trim();
+  const en  = document.getElementById('up-title-en').value.trim();
+  const cat = document.getElementById('up-category').value;
+  if (!de) return toast('Bitte deutschen Titel eingeben', 'error');
+  if (!en) return toast('Bitte englischen Titel eingeben', 'error');
+
+  const btn      = document.getElementById('up-btn');
+  const progress = document.getElementById('upload-progress');
+  const fill     = document.getElementById('progress-fill');
+  const progText = document.getElementById('progress-text');
+
+  btn.disabled = true;
+  progress.style.display = 'block';
+
+  // Simulate progress stages
+  const stages = [
+    { pct: 20, text: 'Bild wird hochgeladen…' },
+    { pct: 50, text: 'Watermark wird hinzugefügt…' },
+    { pct: 75, text: 'Wird auf GitHub gespeichert…' },
+    { pct: 90, text: 'Netlify Deploy wird ausgelöst…' },
+  ];
+  let stageIdx = 0;
+  const interval = setInterval(() => {
+    if (stageIdx < stages.length) {
+      fill.style.width = stages[stageIdx].pct + '%';
+      progText.textContent = stages[stageIdx].text;
+      stageIdx++;
+    }
+  }, 1500);
+
+  const fd = new FormData();
+  fd.append('image',    uploadFile);
+  fd.append('title_de', de);
+  fd.append('title_en', en);
+  fd.append('category', cat);
+  fd.append('quality',  document.getElementById('up-quality').value);
+
+  try {
+    const r    = await fetch('/api/artworks/upload', { method: 'POST', body: fd });
+    const data = await r.json();
+
+    clearInterval(interval);
+    fill.style.width = '100%';
+    progText.textContent = r.ok ? 'Fertig! ✦' : 'Fehler';
+
+    if (r.ok) {
+      toast('✦ Bild hochgeladen, Watermark gesetzt & auf Netlify deployed! 🌸');
+      document.getElementById('up-title-de').value = '';
+      document.getElementById('up-title-en').value = '';
+      document.getElementById('dz-preview').style.display = 'none';
+      document.getElementById('dz-label').textContent = 'Bild hierher ziehen oder klicken';
+      uploadFile = null; fi.value = '';
+      await loadArtworks();
+      refreshDeployStatus();
+    } else {
+      toast(data.error || 'Upload fehlgeschlagen', 'error');
+    }
+  } catch {
+    clearInterval(interval);
+    toast('Netzwerkfehler beim Upload', 'error');
+  } finally {
+    btn.disabled = false;
+    setTimeout(() => { progress.style.display = 'none'; fill.style.width = '0%'; }, 2000);
+  }
+}
+
+// ── Pages ─────────────────────────────────────────────────────────────────────
+async function loadPages() {
+  const r = await fetch('/api/pages');
+  if (!r.ok) return;
+  renderPages(await r.json());
+}
+
+function renderPages(pages) {
+  document.getElementById('page-list').innerHTML = pages.map(p => `
+    <div class="page-item">
+      <div><span class="page-item-name">${p}</span>${p==='index.html'?'<span class="page-item-badge">Hauptseite</span>':''}</div>
+      <div class="page-actions">
+        <a href="/preview/${p}" target="_blank" class="btn btn-ghost btn-sm">↗ Vorschau</a>
+        ${p!=='index.html'?`<button class="btn btn-danger btn-sm" onclick="deletePage('${p}')">Löschen</button>`:''}
+      </div>
+    </div>`).join('');
+}
+
+async function createPage() {
+  const name  = document.getElementById('new-page-name').value.trim();
+  const title = document.getElementById('new-page-title').value.trim();
+  if (!name)  return toast('Bitte URL-Namen eingeben', 'error');
+  if (!title) return toast('Bitte Seitentitel eingeben', 'error');
+  try {
+    const r = await fetch('/api/pages/create', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ name, title }) });
+    const d = await r.json();
+    if (r.ok) { toast(`✦ Seite "${title}" erstellt & deployed!`); document.getElementById('new-page-name').value = ''; document.getElementById('new-page-title').value = ''; loadPages(); refreshDeployStatus(); }
+    else toast(d.error || 'Fehler', 'error');
+  } catch { toast('Netzwerkfehler', 'error'); }
+}
+
+async function deletePage(name) {
+  if (!confirm(`Seite "${name}" wirklich löschen?`)) return;
+  try {
+    const r = await fetch(`/api/pages/${name}`, { method: 'DELETE' });
+    const d = await r.json();
+    if (r.ok) { toast('🗑 Seite gelöscht'); loadPages(); }
+    else toast(d.error || 'Fehler', 'error');
+  } catch { toast('Netzwerkfehler', 'error'); }
+}
+
+// ── Preview ───────────────────────────────────────────────────────────────────
+function reloadPreview() {
+  document.getElementById('preview-frame').src = '/preview/index.html';
+}
+
+// ── Logs (admin only) ─────────────────────────────────────────────────────────
+async function loadLogs() {
+  try {
+    const r = await fetch('/api/logs');
+    allLogs = await r.json();
+    renderLogs();
+  } catch { toast('Logs konnten nicht geladen werden', 'error'); }
+}
+
+function filterLogs(level, btn) {
+  logFilter = level;
+  document.querySelectorAll('.log-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLogs();
+}
+
+function renderLogs() {
+  const filtered = logFilter === 'all' ? allLogs : allLogs.filter(l => l.level === logFilter);
+  const list = document.getElementById('log-list');
+  if (!filtered.length) { list.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:8px">Keine Einträge</p>'; return; }
+  list.innerHTML = filtered.map(l => {
+    const ts     = new Date(l.ts).toLocaleString('de-DE');
+    const detail = l.detail ? ` — <span class="log-detail">${l.detail}</span>` : '';
+    const err    = l.error  ? ` <span class="log-error">✗ ${l.error}</span>` : '';
+    return `<div class="log-entry ${l.level}">
+      <span class="log-ts">${ts}</span>
+      <span class="log-user">${l.user}</span>
+      <span class="log-action">${l.action}</span>${detail}${err}
+    </div>`;
+  }).join('');
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+checkAuth();
+</script>
+</body>
+</html>
