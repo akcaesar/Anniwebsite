@@ -1,0 +1,6 @@
+anniya-admin/.env
+anniya-admin/node_modules
+anniya-admin/dist
+anniya-admin/build
+anniya-admin/.DS_Store
+anniya-admin/START.md
