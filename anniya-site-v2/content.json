@@ -1,26 +1,7 @@
 {
-  "hero": {
-    "subtitle_de": "",
-    "subtitle_en": ""
-  },
-  "about": {
-    "text_de": "",
-    "text_en": ""
-  },
-  "contact": {
-    "text_de": "",
-    "text_en": ""
-  },
-  "colors": {
-    "primary": "#ff0000",
-    "background": "#1a1228",
-    "accent": "#46dd50"
-  },
-  "categories": [
-    "mental-health",
-    "women",
-    "fanart",
-    "sketches",
-    "other"
-  ]
+  "hero":    { "subtitle_de": "", "subtitle_en": "" },
+  "about":   { "text_de": "", "text_en": "" },
+  "contact": { "text_de": "", "text_en": "" },
+  "colors":  { "primary": "#7C5CBF", "background": "#1a1228", "accent": "#A98FD8" },
+  "categories": ["mental-health", "women", "fanart", "sketches", "other"]
 }
