@@ -41,7 +41,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; 
 #hero { min-height: 100vh; position: relative; display: flex; align-items: center; overflow: hidden; }
 .hero-img {
   position: absolute; inset: 0; z-index: 0;
-  background: url('images/hero/Website_Anniya.jpeg') center center / cover no-repeat;
+  background: url('../../images/hero/Website_Anniya.jpeg') center center / cover no-repeat;
 }
 .hero-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, rgba(18,10,32,.88) 0%, rgba(18,10,32,.72) 45%, rgba(18,10,32,.1) 100%); }
 .hero-content { position: relative; z-index: 1; padding: 0 56px; max-width: 720px; text-align: center; display: flex; flex-direction: column; align-items: center; }
