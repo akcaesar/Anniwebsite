@@ -187,7 +187,7 @@ footer { background: #0E0918; padding: 36px 56px; display: flex; align-items: ce
     z-index: 999;
     margin-right: 0;
   }
-  .nav-links.open { display: flex; }
+  .nav-links.open { display: flex !important; overflow-y: auto; padding: 80px 20px 40px; }
   .nav-links a { font-size: 16px; letter-spacing: .18em; }
 
   /* Language switcher inside hamburger menu */
