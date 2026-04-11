@@ -158,3 +158,39 @@ window.addEventListener('scroll', () => {
   const nav = document.querySelector('nav');
   if (nav) nav.style.padding = window.scrollY > 50 ? '14px 56px' : '22px 56px';
 });
+
+
+// ── Hamburger menu (mobile) ───────────────────────────────────────────────────
+(function() {
+  const nav = document.querySelector('nav');
+  if (!nav) return;
+
+  const hamburger = document.createElement('div');
+  hamburger.className = 'nav-hamburger';
+  hamburger.innerHTML = '<span></span><span></span><span></span>';
+  nav.appendChild(hamburger);
+
+  const navLinks = document.querySelector('.nav-links');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      hamburger.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  document.addEventListener('click', e => {
+    if (!nav.contains(e.target) && navLinks.classList.contains('open')) {
+      navLinks.classList.remove('open');
+      hamburger.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+})();
