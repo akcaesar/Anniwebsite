@@ -1,0 +1,282 @@
+[
+  {
+    "id": "1000",
+    "title_de": "Growth",
+    "title_en": "Growth",
+    "category": "mental-health",
+    "file": "images/artwork/mental-health/Growth.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1001",
+    "title_de": "Freiheit & Unabhängigkeit",
+    "title_en": "Freedom & Independence",
+    "category": "mental-health",
+    "file": "images/artwork/mental-health/Freedom_Independence.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1002",
+    "title_de": "Unbenanntes Projekt",
+    "title_en": "Untitled Project",
+    "category": "mental-health",
+    "file": "images/artwork/mental-health/Unbenanntes_Projekt.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1003",
+    "title_de": "Innerer Kritiker",
+    "title_en": "Inner Critic",
+    "category": "mental-health",
+    "file": "images/artwork/mental-health/Innerer_Kritiker.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1004",
+    "title_de": "Inneres Kind",
+    "title_en": "Inner Child",
+    "category": "mental-health",
+    "file": "images/artwork/mental-health/Inneres_Kind.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1005",
+    "title_de": "Highway",
+    "title_en": "Highway",
+    "category": "mental-health",
+    "file": "images/artwork/mental-health/Highway.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1006",
+    "title_de": "Suffocate Me",
+    "title_en": "Suffocate Me",
+    "category": "mental-health",
+    "file": "images/artwork/mental-health/Suffocate_Me.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1007",
+    "title_de": "Woman",
+    "title_en": "Woman",
+    "category": "women",
+    "file": "images/artwork/feminity/Woman.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1008",
+    "title_de": "Flower Girl",
+    "title_en": "Flower Girl",
+    "category": "women",
+    "file": "images/artwork/feminity/Flowergirl.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1009",
+    "title_de": "Greek Woman",
+    "title_en": "Greek Woman",
+    "category": "women",
+    "file": "images/artwork/feminity/Greek_woman_.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1010",
+    "title_de": "Talking on the Phone",
+    "title_en": "Talking on the Phone",
+    "category": "women",
+    "file": "images/artwork/feminity/Talking_on_the_phone_.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1011",
+    "title_de": "The Widow",
+    "title_en": "The Widow",
+    "category": "women",
+    "file": "images/artwork/feminity/The_Widow.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1012",
+    "title_de": "Stripes × A Lady",
+    "title_en": "Stripes × A Lady",
+    "category": "women",
+    "file": "images/artwork/feminity/Stripes_X_A_Lady.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1013",
+    "title_de": "Woman in the Shadows",
+    "title_en": "Woman in the Shadows",
+    "category": "women",
+    "file": "images/artwork/feminity/Woman_in_the_shadows.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1014",
+    "title_de": "Woman with the Hat",
+    "title_en": "Woman with the Hat",
+    "category": "women",
+    "file": "images/artwork/feminity/Woman_with_the_hat.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1015",
+    "title_de": "Life Tree",
+    "title_en": "Life Tree",
+    "category": "women",
+    "file": "images/artwork/feminity/Life_Tree.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1016",
+    "title_de": "Dream – Telekinetic Witch",
+    "title_en": "Dream – Telekinetic Witch",
+    "category": "women",
+    "file": "images/artwork/feminity/Dream_Telekinetic_Witch.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1017",
+    "title_de": "Sakura",
+    "title_en": "Sakura",
+    "category": "women",
+    "file": "images/artwork/feminity/Sakura.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1018",
+    "title_de": "Faye Valentine",
+    "title_en": "Faye Valentine",
+    "category": "fanart",
+    "file": "images/artwork/fanart/Faye_Valentine.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1019",
+    "title_de": "Ghibli",
+    "title_en": "Ghibli",
+    "category": "fanart",
+    "file": "images/artwork/fanart/Ghibli_.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1020",
+    "title_de": "LDR Doll",
+    "title_en": "LDR Doll",
+    "category": "fanart",
+    "file": "images/artwork/fanart/LDR_Doll.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1021",
+    "title_de": "LDR Met Gala",
+    "title_en": "LDR Met Gala",
+    "category": "fanart",
+    "file": "images/artwork/fanart/LDR_Met_Gala.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1022",
+    "title_de": "Lana × Kill Bill",
+    "title_en": "Lana × Kill Bill",
+    "category": "fanart",
+    "file": "images/artwork/fanart/Lana_X_KillBill.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1023",
+    "title_de": "Heads in the Clouds",
+    "title_en": "Heads in the Clouds",
+    "category": "fanart",
+    "file": "images/artwork/fanart/Heads_In_The_Clouds.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1024",
+    "title_de": "Ink Women",
+    "title_en": "Ink Women",
+    "category": "sketches",
+    "file": "images/artwork/sketches/Ink_Women.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1025",
+    "title_de": "Two Figures",
+    "title_en": "Two Figures",
+    "category": "sketches",
+    "file": "images/artwork/sketches/Two_Figures.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1026",
+    "title_de": "Divided",
+    "title_en": "Divided",
+    "category": "sketches",
+    "file": "images/artwork/sketches/Divided.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1027",
+    "title_de": "1000 Doves",
+    "title_en": "1000 Doves",
+    "category": "sketches",
+    "file": "images/artwork/sketches/1000_Doves.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1028",
+    "title_de": "Sterntaler",
+    "title_en": "Sterntaler",
+    "category": "other",
+    "file": "images/artwork/other/Sterntaler.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1029",
+    "title_de": "Holi × Love",
+    "title_en": "Holi × Love",
+    "category": "other",
+    "file": "images/artwork/other/Holi_X_Love.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1030",
+    "title_de": "Valentine's Day",
+    "title_en": "Valentine's Day",
+    "category": "other",
+    "file": "images/artwork/other/Valentines_Day.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1031",
+    "title_de": "Cozy Times",
+    "title_en": "Cozy Times",
+    "category": "other",
+    "file": "images/artwork/other/Cozy_Times.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1032",
+    "title_de": "Autumn",
+    "title_en": "Autumn",
+    "category": "other",
+    "file": "images/artwork/other/Autumn.jpg",
+    "year": 2024
+  },
+  {
+    "id": "1033",
+    "title_de": "Pisces",
+    "title_en": "Pisces",
+    "category": "other",
+    "file": "images/artwork/other/Pisces.jpeg",
+    "year": 2024
+  },
+  {
+    "id": "1034",
+    "title_de": "Year of the Tiger",
+    "title_en": "Year of the Tiger",
+    "category": "other",
+    "file": "images/artwork/other/Year_Of_The_Tiger.jpeg",
+    "year": 2024
+  }
+]

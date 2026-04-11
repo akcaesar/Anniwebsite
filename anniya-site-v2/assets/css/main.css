@@ -147,6 +147,7 @@ footer { background: #0E0918; padding: 36px 56px; display: flex; align-items: ce
 .lang-en [data-de] { display: none !important; }
 .lang-de [data-en] { display: none !important; }
 
+<<<<<<< Updated upstream
 /* ═══════════════════════════════════════
    REPLACE everything from @media(max-width:900px)
    to the end of main.css with this block
@@ -310,3 +311,16 @@ footer { background: #0E0918; padding: 36px 56px; display: flex; align-items: ce
   /* FOOTER */
   footer { padding: 28px 18px; }
 }
+=======
+@media(max-width:900px){
+  nav{padding:18px 20px;}section{padding:64px 20px;}
+  #about{grid-template-columns:1fr;gap:40px;}
+  .about-img-wrap{max-width:280px;margin:0 auto;}
+  .masonry{columns:2;}.c-row{grid-template-columns:1fr;}
+  footer{flex-direction:column;gap:14px;text-align:center;}
+  .lang{top:18px;right:14px;}
+  .hero-content{padding:0 24px;}
+  .scroll-hint{left:24px;}
+}
+@media(max-width:540px){.masonry{columns:1;}}
+>>>>>>> Stashed changes
