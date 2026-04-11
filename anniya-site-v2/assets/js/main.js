@@ -165,7 +165,6 @@ window.addEventListener('scroll', () => {
   const nav = document.querySelector('nav');
   if (!nav) return;
 
-  // Inject hamburger button
   const hamburger = document.createElement('div');
   hamburger.className = 'nav-hamburger';
   hamburger.innerHTML = '<span></span><span></span><span></span>';
@@ -179,7 +178,6 @@ window.addEventListener('scroll', () => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
-  // Close on link click
   navLinks.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
       navLinks.classList.remove('open');
@@ -188,7 +186,6 @@ window.addEventListener('scroll', () => {
     });
   });
 
-  // Close on outside tap
   document.addEventListener('click', e => {
     if (!nav.contains(e.target) && navLinks.classList.contains('open')) {
       navLinks.classList.remove('open');
