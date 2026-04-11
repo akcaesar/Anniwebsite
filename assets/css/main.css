@@ -244,7 +244,7 @@ footer { background: #0E0918; padding: 36px 56px; display: flex; align-items: ce
   /* HERO */
   #hero { min-height: 100svh; }
   .hero-img {
-    background-image: url('images/hero/Website_Anniya_mobile.jpeg'), url('images/hero/Website_Anniya.jpeg');
+    background: url('images/hero/Website_Anniya_mobile.jpeg') center center / cover no-repeat;
     background-position: center center;
     background-size: cover;
   }
