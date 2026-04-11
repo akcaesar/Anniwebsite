@@ -155,42 +155,55 @@ function handleFormSubmit(e) {
 
 // ── Nav shrink on scroll ──────────────────────────────────────────────────────
 window.addEventListener('scroll', () => {
+  if (window.innerWidth <= 600) return;
   const nav = document.querySelector('nav');
   if (nav) nav.style.padding = window.scrollY > 50 ? '14px 56px' : '22px 56px';
 });
 
 
 // ── Hamburger menu (mobile) ───────────────────────────────────────────────────
-(function() {
-  const nav = document.querySelector('nav');
-  if (!nav) return;
-
-  const hamburger = document.createElement('div');
-  hamburger.className = 'nav-hamburger';
-  hamburger.innerHTML = '<span></span><span></span><span></span>';
-  nav.appendChild(hamburger);
-
+// Hamburger menu
+if (window.innerWidth <= 600) {
+  const nav      = document.querySelector('nav');
   const navLinks = document.querySelector('.nav-links');
+  if (nav && navLinks) {
+    // Create hamburger button
+    const hamburger = document.createElement('div');
+    hamburger.className = 'nav-hamburger';
+    hamburger.innerHTML = '<span></span><span></span><span></span>';
+    nav.appendChild(hamburger);
 
-  hamburger.addEventListener('click', () => {
-    const isOpen = navLinks.classList.toggle('open');
-    hamburger.classList.toggle('open', isOpen);
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-  });
+    // Inject language switcher inside nav menu
+    const langMobile = document.createElement('div');
+    langMobile.className = 'nav-lang-mobile';
+    const curLang = document.body.classList.contains('lang-en') ? 'en' : 'de';
+    langMobile.innerHTML = `
+      <button class="${curLang==='de'?'on':''}" onclick="setLang('de');updateMobileLang()">DE</button>
+      <button class="${curLang==='en'?'on':''}" onclick="setLang('en');updateMobileLang()">EN</button>
+    `;
+    navLinks.appendChild(langMobile);
 
-  navLinks.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      hamburger.classList.remove('open');
-      document.body.style.overflow = '';
+    // Toggle menu
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      navLinks.classList.toggle('open');
     });
-  });
 
-  document.addEventListener('click', e => {
-    if (!nav.contains(e.target) && navLinks.classList.contains('open')) {
-      navLinks.classList.remove('open');
-      hamburger.classList.remove('open');
-      document.body.style.overflow = '';
-    }
+    // Close menu on link click
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+      });
+    });
+  }
+}
+
+// Update mobile lang buttons active state
+function updateMobileLang() {
+  const btns = document.querySelectorAll('.nav-lang-mobile button');
+  const curLang = document.body.classList.contains('lang-en') ? 'en' : 'de';
+  btns.forEach(b => {
+    b.classList.toggle('on', b.textContent.trim().toLowerCase() === curLang);
   });
-})();
+}
